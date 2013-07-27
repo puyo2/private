@@ -1,87 +1,183 @@
-"##########
-"#½é´üÀßÄê#
-"##########
+"â–¼  neobundle
+"--------------------------------------------------------------------------
+set nocompatible 
+filetype off
+filetype plugin indent off
 
-"Ê¸»ú¥³¡¼¥É
-:set encoding=utf-8
-:set fileencodings=utf-8,ucs-bom,iso-2022-jp,euc-jp,cp932,latin1
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim
+  call neobundle#rc(expand('~/.vim/bundle/'))
+endif
+" originalrepos on github
+NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/vimproc'
+NeoBundle 'VimClojure'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/unite-outline'
+NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'jpalardy/vim-slime'
+NeoBundle 'scrooloose/syntastic'
+""NeoBundle 'https://bitbucket.org/kovisoft/slimv'
 
-"vimrc¤òÊÔ½¸¤¹¤ë¤¿¤á¤Î¥·¥ç¡¼¥È¥«¥Ã¥È¥­¡¼
-nnoremap <Space>. :<C-u>edit $MYVIMRC<Enter>
-nnoremap <Space>s. :<C-u>source $MYVIMRC<Enter>
+filetype plugin indent on     " required!
+filetype indent on
+syntax on
 
-"¥Õ¥¡¥¤¥ë¥¿¥¤¥×¤ÎÁªÂò
-filetype plugin indent on
 
-"##########
-"#É½¼¨´ØÏ¢#
-"##########
+"â–¼  unite.vim
+"--------------------------------------------------------------------------
+"unite.vimã‚’insertãƒ¢ãƒ¼ãƒ‰ã§èµ·å‹•
+let g:unite_enable_start_insert = 1
+nnoremap    [unite]   <Nop>
+nmap    <Leader>f [unite]
+ 
+" unite.vim èµ·å‹•æ™‚ã®remap 
+nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer<CR>
+nnoremap <silent> [unite]n :<C-u>Unite<Space>file<CR>
+nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
+nnoremap <silent> [unite]m :<C-u>Unite<Space>file_mru<CR>
+nnoremap <silent> [unite]o :<C-u>Unite<Space>outline<CR>
+nnoremap <silent> [unite]r :<C-u>UniteWithBufferDir file<CR>
+ 
 
-"¥«¥é¡¼¥¹¥­¡¼¥Ş¤ÎÀßÄê
+"â–¼  neocomplcache
+"--------------------------------------------------------------------------
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplcache.
+let g:neocomplcache_enable_at_startup = 1
+" Use underbar completion.
+let g:neocomplcache_enable_underbar_completion = 1
+" Set minimum syntax keyword length.
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+ " Use smartcase.
+let g:neocomplcache_enable_smart_case = 1
+" Use camel case completion.
+let g:neocomplcache_enable_camel_case_completion = 1
+" Select with <TAB>
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+
+let g:neocomplcache_ctags_arguments_list = {
+  \ 'perl' : '-R -h ".pm"'
+  \ }
+
+let g:neocomplcache_snippets_dir = "~/.vim/snippets"
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default'    : '',
+    \ 'perl'       : $HOME . '/.vim/dict/perl.dict'
+    \ }
+
+" Define keyword.
+if !exists('g:neocomplcache_keyword_patterns')
+  let g:neocomplcache_keyword_patterns = {}
+endif
+let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+
+"â–¼  è¡¨ç¤ºé–¢é€£
+"--------------------------------------------------------------------------
+"æ–‡å­—ã‚³ãƒ¼ãƒ‰
+set encoding=utf-8
+set fileencodings=utf-8,ucs-bom,iso-2022-jp,euc-jp,cp932,latin1
+
+"ã‚«ãƒ©ãƒ¼ã‚¹ã‚­ãƒ¼ãƒã®è¨­å®š
 colorscheme desert
-"¿§¤ò¤Ä¤±¤ë
+"è‰²ã‚’ã¤ã‘ã‚‹
 syntax enable 
-"ÈÖ¹æ¤ò¤Ä¤±¤ë
+
+"ç•ªå·ã‚’ã¤ã‘ã‚‹
 set number
-"²£Àş¤È½ÄÀş¤ò¤Ä¤±¤ë
+
+"æ¨ªç·šã¨ç¸¦ç·šã‚’ã¤ã‘ã‚‹
 set cursorline
 set cursorcolumn
-"ÊÄ¤¸³ç¸Ì¤¬ÆşÎÏ¤µ¤ì¤¿¤È¤­¡¢ÂĞ±ş¤¹¤ë³ç¸Ì¤òÉ½¼¨¤¹¤ë
+
+"é–‰ã˜æ‹¬å¼§ãŒå…¥åŠ›ã•ã‚ŒãŸã¨ãã€å¯¾å¿œã™ã‚‹æ‹¬å¼§ã‚’è¡¨ç¤ºã™ã‚‹
 set showmatch
-"³ç¸Ì¤Î¥Ï¥¤¥é¥¤¥È»ş´Ö¤ò»ØÄê¤¹¤ë(1/10ÉÃasdf)
+"æ‹¬å¼§ã®ãƒã‚¤ãƒ©ã‚¤ãƒˆæ™‚é–“ã‚’æŒ‡å®šã™ã‚‹(1/10ç§’)
 set matchtime=3
 
-"##########
-"#°ÜÆ°Áàºî#
-"##########
+"ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ©ã‚¤ãƒ³ã®è¨­å®š
+set statusline=%t\%=[%{&ff}]\[%{&fileencoding}]
+"ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ©ã‚¤ãƒ³è¡¨ç¤ºä½ç½®(ä¸‹ã‹ã‚‰)
+set laststatus=2
 
-"¥«¡¼¥½¥ë¤ò¹ÔÆ¬¡¢¹ÔËö¤Ç»ß¤Ş¤é¤Ê¤¤¤è¤¦¤Ë¤¹¤ë
+"ç©ºç™½æ–‡å­—ã®å¯è¦–åŒ–
+set list
+set listchars=tab:Â»-,trail:-,eol:â†²,extends:Â»,precedes:Â«,nbsp:%
+
+if has("syntax")
+    syntax on
+ 
+    " PODãƒã‚°å¯¾ç­–
+    syn sync fromstart
+ 
+    function! ActivateInvisibleIndicator()
+        "ä¸‹ã®è¡Œã®"ã€€"ã¯å…¨è§’ã‚¹ãƒšãƒ¼ã‚¹
+        syntax match InvisibleJISX0208Space "ã€€" display containedin=ALL
+        highlight InvisibleJISX0208Space term=underline ctermbg=Blue guibg=darkgray gui=underline
+    endfunction
+ 
+    augroup invisible
+        autocmd! invisible
+        autocmd BufNew,BufRead * call ActivateInvisibleIndicator()
+    augroup END
+endif
+
+
+"â–¼  ç§»å‹•æ“ä½œ
+"--------------------------------------------------------------------------
+"ã‚«ãƒ¼ã‚½ãƒ«ã‚’è¡Œé ­ã€è¡Œæœ«ã§æ­¢ã¾ã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
 set whichwrap=b,s,h,l,<,>,[,]
 
-"Á´¥â¡¼¥É¤Ç¥Ş¥¦¥¹¤òÍ­¸ú²½
-set mouse=a
 
-"##########
-"#ÆşÎÏ´ØÏ¢#
-"##########
-
-"¿·¤·¤¤¹Ô¤Î¥¤¥ó¥Ç¥ó¥È¤ò¸½ºß¤Î¹Ô¤ÈÆ±¤¸¤Ë¤¹¤ë
+"â–¼  å…¥åŠ›é–¢é€£
+"--------------------------------------------------------------------------
+"æ–°ã—ã„è¡Œã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’ç¾åœ¨ã®è¡Œã¨åŒã˜ã«ã™ã‚‹
 set autoindent
 
-"¥¿¥Ö¤ÎÂå¤ï¤ê¤Ë¶õÇòÊ¸»ú¤òÆş¤ì¤ë
+"ã‚¿ãƒ–ã®ä»£ã‚ã‚Šã«ç©ºç™½æ–‡å­—ã‚’å…¥ã‚Œã‚‹
 set expandtab
-"tabstop     (ts)  ¥Õ¥¡¥¤¥ëÃæ¤Î<Tab>Ê¸»ú¤òÅ¸³«¤¹¤ëÊ¸»ú¿ô
-"shiftwidth  (sw)  ¼«Æ°Åª¤ËÁŞÆş¤µ¤ì¤ëÎÌ
-"softtabstop (sts) ¥­¡¼¥Ü¡¼¥É¤Ç<Tab>¥­¡¼¤ò²¡¤·¤¿»ş¤ËÁŞÆş¤µ¤ì¤ë¶õÇò¤ÎÎÌ
+"tabstop     (ts)  ãƒ•ã‚¡ã‚¤ãƒ«ä¸­ã®<Tab>æ–‡å­—ã‚’å±•é–‹ã™ã‚‹æ–‡å­—æ•°
+"shiftwidth  (sw)  è‡ªå‹•çš„ã«æŒ¿å…¥ã•ã‚Œã‚‹é‡
+"softtabstop (sts) ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã§<Tab>ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸæ™‚ã«æŒ¿å…¥ã•ã‚Œã‚‹ç©ºç™½ã®é‡
 set ts=4 sw=4 sts=0
 
-"¥Ğ¥Ã¥¯¥¹¥Ú¡¼¥¹¤ÎµóÆ°²şÁ±
+"ãƒãƒƒã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã®æŒ™å‹•æ”¹å–„
 set backspace=indent,eol,start
 
-"##########
-"#¸¡º÷¤È¤«#
-"##########
 
-" Esc Esc ¤Ç¥Ï¥¤¥é¥¤¥ÈOFF
+"â–¼  æ¤œç´¢ã¨ã‹
+"--------------------------------------------------------------------------
+" ãƒã‚¤ãƒ©ã‚¤ãƒˆON
+set hlsearch
+" Esc Esc ã§ãƒã‚¤ãƒ©ã‚¤ãƒˆOFF
 nnoremap <Esc><Esc> :<C-u>set nohlsearch<Return>
-"¸¡º÷¤ò¥Õ¥¡¥¤¥ë¤ÎÀèÆ¬¤Ø¥ë¡¼¥×¤·¤Ê¤¤
+"æ¤œç´¢ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã®å…ˆé ­ã¸ãƒ«ãƒ¼ãƒ—ã—ãªã„
 set nowrapscan
-"ÆşÎÏÃæ¤Ç¤â¸¡º÷·ë²Ì¤òÉ½¼¨¡Ê¥¤¥ó¥¯¥ê¥á¥ó¥¿¥ë¥µ¡¼¥Á¡Ë
+"å…¥åŠ›ä¸­ã§ã‚‚æ¤œç´¢çµæœã‚’è¡¨ç¤ºï¼ˆã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«ã‚µãƒ¼ãƒï¼‰
 set incsearch
-"¸¡º÷»ş¤ËÂçÊ¸»ú¾®Ê¸»ú¤ò¶èÊÌ¤·¤Ê¤¤
+"æ¤œç´¢æ™‚ã«å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„
 set ignorecase
-"¸¡º÷»ş¤ËÂçÊ¸»ú¤ò´Ş¤ó¤Ç¤¤¤¿¤éÂç/¾®¤ò¶èÊÌ
+"æ¤œç´¢æ™‚ã«å¤§æ–‡å­—ã‚’å«ã‚“ã§ã„ãŸã‚‰å¤§/å°ã‚’åŒºåˆ¥
 set smartcase
-
-"Êä´°µ¡Ç½¤Ë¸õÊä¤òÉ½¼¨¤¹¤ë
+"è£œå®Œæ©Ÿèƒ½ã«å€™è£œã‚’è¡¨ç¤ºã™ã‚‹
 set wildmenu
 
-"##########
-"#¥­¡¼ÊÑ¹¹#
-"##########
 
+"ã‚­ãƒ¼å¤‰æ›´
+"--------------------------------------------------------------------------
+"è‹±å­—ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚’ä½¿ã„ã‚„ã™ãã™ã‚‹
 noremap ; :
 noremap! ; :
 noremap : ;
 noremap! : ;
-inoremap <C-j> <ESC>
+
+"--------------------------------------------------------------------------
+"ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—é–¢é€£ã‚’æœ‰åŠ¹ã«ã™ã‚‹
+filetype plugin indent on
